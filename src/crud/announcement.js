@@ -18,7 +18,12 @@ class AnnouncementController {
     }
     try {
       // Find an Announcement document by its _id using the Mongoose model
-      return await Announcement.findById(id);
+      const data=await Announcement.findById(id);
+
+      if(!data) throw new HttpException(400, "data does not exists");
+      
+      return data;
+      
     } catch (e) {
       throw new HttpException(500, e.message || "Internal Server Error");
     }
@@ -29,7 +34,7 @@ class AnnouncementController {
       throw new HttpException(400, "Invalid Id");
     }
     try {
-      // Find Announcement documents with a specific confId using the Mongoose model
+      
       return await Announcement.find({ confId: id });
     } catch (e) {
       throw new HttpException(500, e.message || "Internal Server Error");
@@ -61,6 +66,7 @@ class AnnouncementController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
+    
     try {
       // Delete an Announcement document by its _id using the Mongoose model
       await Announcement.findByIdAndDelete(id);
