@@ -3,6 +3,9 @@ const HttpException = require("../models/http-exception");
 
 class ParticipantController {
     async addParticipant(participant) {
+        if(!isValidParticipant(participant)) {
+            return res.status(400).json({ error: 'Invalid participant data' });
+          }
         try {
             // Create a new Participant document using the Mongoose model
             return await Participant.create(participant);
@@ -18,7 +21,9 @@ class ParticipantController {
 
         try {
             // Find a Participant document by _id using the Mongoose model
-            return await Participant.findById(id);
+            const Participant=  await Participant.findById(id);
+            if (!Participant) throw new HttpException(400, "data does not exists");
+            return Participant;
         } catch (e) {
             throw new HttpException(500, e?.message || "Internal Server Error");
         }
@@ -46,7 +51,9 @@ class ParticipantController {
         if (!id) {
             throw new HttpException(400, "Invalid Id");
         }
-        
+        if(!isValidParticipant(participant)) {
+            return res.status(400).json({ error: 'Invalid participant data' });
+          }
         try {
             // Update a Participant document by _id using the Mongoose model
             return await Participant.findByIdAndUpdate(id, participant);
@@ -70,3 +77,19 @@ class ParticipantController {
 }
 
 module.exports = ParticipantController;
+function isValidParticipant(participant) {
+    return (
+      participant &&
+      typeof participant === 'object' &&
+      typeof participant.id === 'string' &&
+      typeof participant.confId === 'string' &&
+      typeof participant.authorName === 'string' &&
+      typeof participant.authorDesignation === 'string' &&
+      typeof participant.authorInstitute === 'string' &&
+      typeof participant.paperTitle === 'string' &&
+      typeof participant.paperId === 'string' &&
+      participant.createdAt instanceof Date &&
+      participant.updatedAt instanceof Date
+    );
+  }
+  

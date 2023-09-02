@@ -3,6 +3,9 @@ const HttpException = require("../models/http-exception");
 
 class NavbarController {
     async addNavbar(navbar) {
+        if(!isValidNavbar(navbar)) {
+            return res.status(400).json({ error: 'Invalid navbar data' });
+          }
         try {
             // Create a new Navbar document using the Mongoose model
             return await Navbar.create(navbar);
@@ -18,7 +21,11 @@ class NavbarController {
 
         try {
             // Find a Navbar document by _id using the Mongoose model
-            return await Navbar.findById(id);
+            
+            const navbar=  await Navbar.findById(id);
+            if (!navbar) throw new HttpException(400, "data does not exists");
+            return navbar;
+            
         } catch (e) {
             throw new HttpException(500, e?.message || "Internal Server Error");
         }
@@ -50,6 +57,9 @@ class NavbarController {
         if (!id) {
             throw new HttpException(400, "Invalid Id");
         }
+        if(!isValidNavbar(navbar)) {
+            return res.status(400).json({ error: 'Invalid navbar data' });
+          }
 
         try {
             // Update a Navbar document by _id using the Mongoose model
@@ -74,3 +84,19 @@ class NavbarController {
 }
 
 module.exports = NavbarController;
+
+function isValidNavbar(navbar) {
+    return (
+      navbar &&
+      typeof navbar === 'object' &&
+      typeof navbar.id === 'string' &&
+      typeof navbar.confId === 'string' &&
+      typeof navbar.heading === 'string' &&
+      typeof navbar.subHeading === 'string' &&
+      typeof navbar.url === 'string' &&
+      typeof navbar.name === 'string' &&
+      navbar.createdAt instanceof Date &&
+      navbar.updatedAt instanceof Date
+    );
+  }
+  

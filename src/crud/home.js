@@ -3,6 +3,9 @@ const HttpException = require("../models/http-exception");
 
 class HomeController {
     async addHome(home) {
+        if (!isValidHome(home)) {
+            return res.status(400).json({ error: 'Invalid Home data' });
+        }
         try {
             // Create a new Home document using the Mongoose model
             await Home.create(home);
@@ -18,7 +21,10 @@ class HomeController {
 
         try {
             // Find a Home document that matches the confId using the Mongoose model
-            return await Home.findOne({ confId: id });
+            const home = await Home.findOne({ confId: id });
+
+            if (!home) throw new HttpException(400, "data does not exists");
+            return home;
         } catch (e) {
             throw new HttpException(500, e?.message || "Internal Server Error");
         }
@@ -50,7 +56,10 @@ class HomeController {
         if (!id) {
             throw new HttpException(400, "Invalid Id");
         }
-        
+        if (!isValidHome(home)) {
+            return res.status(400).json({ error: 'Invalid Home data' });
+        }
+
         try {
             // Update a Home document by its _id using the Mongoose model
             await Home.findByIdAndUpdate(id, home);
@@ -74,3 +83,24 @@ class HomeController {
 }
 
 module.exports = HomeController;
+function isValidHome(home) {
+    return (
+        home &&
+        typeof home === 'object' &&
+        typeof home.id === 'string' &&
+        typeof home.confId === 'string' &&
+        typeof home.confName === 'string' &&
+        home.confStartDate instanceof Date &&
+        home.confEndDate instanceof Date &&
+        (typeof home.logo === 'string' || home.logo === null || home.logo === undefined) &&
+        (typeof home.shortName === 'string' || home.shortName === null || home.shortName === undefined) &&
+        typeof home.aboutConf === 'string' &&
+        (typeof home.aboutIns === 'string' || home.aboutIns === null || home.aboutIns === undefined) &&
+        (typeof home.youtubeLink === 'string' || home.youtubeLink === null || home.youtubeLink === undefined) &&
+        (typeof home.instaLink === 'string' || home.instaLink === null || home.instaLink === undefined) &&
+        (typeof home.facebookLink === 'string' || home.facebookLink === null || home.facebookLink === undefined) &&
+        (typeof home.twitterLink === 'string' || home.twitterLink === null || home.twitterLink === undefined) &&
+        home.createdAt instanceof Date &&
+        home.updatedAt instanceof Date
+    );
+}
