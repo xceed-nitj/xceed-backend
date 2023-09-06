@@ -1,5 +1,6 @@
 const express = require("express");
-const Announcement = require("../models/announcement");
+const Announcement = require("../models/announcements");
+
 const AnnouncementController = require("../crud/announcement");
 
 const announcementController = new AnnouncementController();

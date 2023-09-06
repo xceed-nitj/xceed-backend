@@ -1,4 +1,4 @@
-const Announcement = require("../models/announcement");
+const Announcement = require("../models/announcements");
 const HttpException = require("../models/http-exception");
 
 class AnnouncementController {
@@ -37,7 +37,7 @@ class AnnouncementController {
     }
     try {
       // Find Announcement documents with a specific confId using the Mongoose model
-      
+        
       const data=await Announcement.find({ confId: id });
 
       if(!data) throw new HttpException(400, "data does not exists");
