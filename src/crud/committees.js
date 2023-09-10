@@ -6,16 +6,14 @@ class CommitteesController {
   async getCommitteesByConferenceId(req, res) {
     const { id } = req.params;
     if (!id) {
-        throw new HttpException(400, "Invalid Id");
+      throw new HttpException(400, "Invalid Id");
     }
     try {
       // Find committees with a specific ConfId using the Mongoose model
       const committees = await Committee.find({ ConfId: id });
-   
 
-      if(!committees) throw new HttpException(400, "data does not exists");
+      if (!committees) throw new HttpException(400, "data does not exists");
 
-      
       res.json(committees);
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
@@ -37,7 +35,7 @@ class CommitteesController {
   async getCommitteeById(req, res) {
     const { id } = req.params;
     if (!id) {
-        throw new HttpException(400, "Invalid Id");
+      throw new HttpException(400, "Invalid Id");
     }
     try {
       // Find a committee by its _id using the Mongoose model
@@ -55,9 +53,9 @@ class CommitteesController {
   // POST /committees
   async createCommittee(req, res) {
     const newCommittee = req.body;
-    if(!isValidCommittee(conf)) {
-        return res.status(400).json({ error: 'Invalid Committee data' });
-    }
+    // if(!isValidCommittee(conf)) {
+    //     return res.status(400).json({ error: 'Invalid Committee data' });
+    // }
     try {
       // Create a new committee document using the Mongoose model
       const createdCommittee = await Committee.create(newCommittee);
@@ -71,11 +69,11 @@ class CommitteesController {
   async updateCommittee(req, res) {
     const { id } = req.params;
     if (!id) {
-        throw new HttpException(400, "Invalid Id");
+      throw new HttpException(400, "Invalid Id");
     }
     const updatedCommittee = req.body;
-    if(!isValidCommittee(conf)) {
-        return res.status(400).json({ error: 'Invalid Committee data' });
+    if (!isValidCommittee(conf)) {
+      return res.status(400).json({ error: "Invalid Committee data" });
     }
     try {
       // Update a committee by its _id using the Mongoose model
@@ -94,8 +92,8 @@ class CommitteesController {
   async deleteCommittee(req, res) {
     const { id } = req.params;
     if (!id) {
-        throw new HttpException(400, "Invalid Id");
-      }
+      throw new HttpException(400, "Invalid Id");
+    }
     try {
       // Delete a committee by its _id using the Mongoose model
       const committee = await Committee.findByIdAndDelete(id);
@@ -113,22 +111,25 @@ class CommitteesController {
 module.exports = CommitteesController;
 
 function isValidCommittees(committees) {
-    return (
-      committees &&
-      typeof committees === 'object' &&
-      typeof committees.id === 'string' &&
-      typeof committees.ConfId === 'string' &&
-      typeof committees.Type === 'string' &&
-      (typeof committees.Subtype === 'string' || committees.Subtype === null || committees.Subtype === undefined) &&
-      typeof committees.Name === 'string' &&
-      typeof committees.Designation === 'string' &&
-      typeof committees.Institute === 'string' &&
-      typeof committees.ProfileLink === 'string' &&
-      (typeof committees.ImgLink === 'string' || committees.ImgLink === null || committees.ImgLink === undefined) &&
-      typeof committees.sequence === 'number' &&
-      typeof committees.feature === 'boolean' &&
-      committees.createdAt instanceof Date &&
-      committees.updatedAt instanceof Date
-    );
-  }
-  
+  return (
+    committees &&
+    typeof committees === "object" &&
+    typeof committees.id === "string" &&
+    typeof committees.ConfId === "string" &&
+    typeof committees.Type === "string" &&
+    (typeof committees.Subtype === "string" ||
+      committees.Subtype === null ||
+      committees.Subtype === undefined) &&
+    typeof committees.Name === "string" &&
+    typeof committees.Designation === "string" &&
+    typeof committees.Institute === "string" &&
+    typeof committees.ProfileLink === "string" &&
+    (typeof committees.ImgLink === "string" ||
+      committees.ImgLink === null ||
+      committees.ImgLink === undefined) &&
+    typeof committees.sequence === "number" &&
+    typeof committees.feature === "boolean" &&
+    committees.createdAt instanceof Date &&
+    committees.updatedAt instanceof Date
+  );
+}

@@ -1,11 +1,11 @@
-const Conf = require("../models/conf");
+const Conf = require("../models/confrence");
 const HttpException = require("../models/http-exception");
 
 class ConfController {
   async addConf(conf) {
-    if(!isValidConfrence(conf)) {
-        return res.status(400).json({ error: 'Invalid confrence data' });
-    }
+    // if (!isValidConfrence(conf)) {
+    //   return res.status(400).json({ error: "Invalid confrence data" });
+    // }
     if (!conf.email || !conf.email.includes("@")) {
       throw new HttpException(400, "Invalid Email");
     }
@@ -27,10 +27,9 @@ class ConfController {
     try {
       // Find a Conf document by its _id using the Mongoose model
       const conf = await Conf.findById(id);
-    
-      if(!conf) throw new HttpException(400, "data does not exists");
 
-      
+      if (!conf) throw new HttpException(400, "data does not exists");
+
       return conf;
     } catch (e) {
       throw new HttpException(500, e.message || "Internal Server Error");
@@ -49,10 +48,10 @@ class ConfController {
 
   async updateConf(conf, id) {
     if (!id) {
-        throw new HttpException(400, "Invalid Id");
-      } 
-    if(!isValidConfrence(conf)) {
-        return res.status(400).json({ error: 'Invalid Confrence data' });
+      throw new HttpException(400, "Invalid Id");
+    }
+    if (!isValidConfrence(conf)) {
+      return res.status(400).json({ error: "Invalid Confrence data" });
     }
     if (!conf.email || !conf.email.includes("@")) {
       throw new HttpException(400, "Invalid Email");
@@ -85,26 +84,32 @@ class ConfController {
 module.exports = ConfController;
 
 function isValidConfrence(confrence) {
-    return (
-      confrence &&
-      typeof confrence === 'object' &&
-      typeof confrence.id === 'string' &&
-      (typeof confrence.email === 'string' && /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i.test(confrence.email)) &&
-      (typeof confrence.name === 'string' || confrence.name === null || confrence.name === undefined) &&
-      confrence.createdAt instanceof Date &&
-      confrence.updatedAt instanceof Date &&
-      (confrence.Home === null || typeof confrence.Home === 'object') &&
-      (confrence.Navbar === null || typeof confrence.Navbar === 'object') &&
-      (Array.isArray(confrence.Participant) || confrence.Participant === undefined) &&
-      (Array.isArray(confrence.EventDates) || confrence.EventDates === undefined) &&
-      (Array.isArray(confrence.Annoucement) || confrence.Annoucement === undefined) &&
-      (Array.isArray(confrence.Images) || confrence.Images === undefined) &&
-      (Array.isArray(confrence.Sponsors) || confrence.Sponsors === undefined) &&
-      (Array.isArray(confrence.Awards) || confrence.Awards === undefined) &&
-      (Array.isArray(confrence.Speakers) || confrence.Speakers === undefined) &&
-      (Array.isArray(confrence.Committees) || confrence.Committees === undefined) &&
-      (Array.isArray(confrence.Contact) || confrence.Contact === undefined) &&
-      (confrence.Location === null || typeof confrence.Location === 'object')
-    );
-  }
-  
+  return (
+    confrence &&
+    typeof confrence === "object" &&
+    typeof confrence.id === "string" &&
+    typeof confrence.email === "string" &&
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i.test(confrence.email) &&
+    (typeof confrence.name === "string" ||
+      confrence.name === null ||
+      confrence.name === undefined) &&
+    confrence.createdAt instanceof Date &&
+    confrence.updatedAt instanceof Date &&
+    (confrence.Home === null || typeof confrence.Home === "object") &&
+    (confrence.Navbar === null || typeof confrence.Navbar === "object") &&
+    (Array.isArray(confrence.Participant) ||
+      confrence.Participant === undefined) &&
+    (Array.isArray(confrence.EventDates) ||
+      confrence.EventDates === undefined) &&
+    (Array.isArray(confrence.Annoucement) ||
+      confrence.Annoucement === undefined) &&
+    (Array.isArray(confrence.Images) || confrence.Images === undefined) &&
+    (Array.isArray(confrence.Sponsors) || confrence.Sponsors === undefined) &&
+    (Array.isArray(confrence.Awards) || confrence.Awards === undefined) &&
+    (Array.isArray(confrence.Speakers) || confrence.Speakers === undefined) &&
+    (Array.isArray(confrence.Committees) ||
+      confrence.Committees === undefined) &&
+    (Array.isArray(confrence.Contact) || confrence.Contact === undefined) &&
+    (confrence.Location === null || typeof confrence.Location === "object")
+  );
+}

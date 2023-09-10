@@ -3,9 +3,9 @@ const HttpException = require("../models/http-exception");
 
 class AnnouncementController {
   async addAnnouncement(announcement) {
-    if(!isValidAnnouncement(announcement)) {
-      return res.status(400).json({ error: 'Invalid Announcement data' });
-    }
+    // if (!isValidAnnouncement(announcement)) {
+    //   return res.status(400).json({ error: "Invalid Announcement data" });
+    // }
     try {
       // Create a new Announcement document using the Mongoose model
       const newAnnouncement = new Announcement(announcement);
@@ -21,9 +21,9 @@ class AnnouncementController {
     }
     try {
       // Find an Announcement document by its _id using the Mongoose model
-      const data=await Announcement.findById(id);
+      const data = await Announcement.findById(id);
 
-      if(!data) throw new HttpException(400, "data does not exists");
+      if (!data) throw new HttpException(400, "data does not exists");
 
       return data;
     } catch (e) {
@@ -37,10 +37,10 @@ class AnnouncementController {
     }
     try {
       // Find Announcement documents with a specific confId using the Mongoose model
-        
-      const data=await Announcement.find({ confId: id });
 
-      if(!data) throw new HttpException(400, "data does not exists");
+      const data = await Announcement.find({ confId: id });
+
+      if (!data) throw new HttpException(400, "data does not exists");
 
       return data;
     } catch (e) {
@@ -61,8 +61,8 @@ class AnnouncementController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if(!isValidAnnouncement(announcement)) {
-      return res.status(400).json({ error: 'Invalid Announcement data' });
+    if (!isValidAnnouncement(announcement)) {
+      return res.status(400).json({ error: "Invalid Announcement data" });
     }
     try {
       // Update an Announcement document by its _id using the Mongoose model
@@ -90,17 +90,21 @@ module.exports = AnnouncementController;
 function isValidAnnouncement(announcement) {
   return (
     announcement &&
-    typeof announcement === 'object' &&
-    typeof announcement.id === 'string' &&
-    typeof announcement.confId === 'string' &&
-    typeof announcement.title === 'string' &&
-    (typeof announcement.metaDescription === 'string' || announcement.metaDescription === null || announcement.metaDescription === undefined) &&
-    typeof announcement.description === 'string' &&
-    typeof announcement.feature === 'boolean' &&
-    typeof announcement.sequence === 'number' &&
-    typeof announcement.new === 'boolean' &&
-    typeof announcement.hidden === 'boolean' &&
-    (typeof announcement.link === 'string' || announcement.link === null || announcement.link === undefined) &&
+    typeof announcement === "object" &&
+    typeof announcement.id === "string" &&
+    typeof announcement.confId === "string" &&
+    typeof announcement.title === "string" &&
+    (typeof announcement.metaDescription === "string" ||
+      announcement.metaDescription === null ||
+      announcement.metaDescription === undefined) &&
+    typeof announcement.description === "string" &&
+    typeof announcement.feature === "boolean" &&
+    typeof announcement.sequence === "number" &&
+    typeof announcement.new === "boolean" &&
+    typeof announcement.hidden === "boolean" &&
+    (typeof announcement.link === "string" ||
+      announcement.link === null ||
+      announcement.link === undefined) &&
     announcement.createdAt instanceof Date &&
     announcement.updatedAt instanceof Date
   );
