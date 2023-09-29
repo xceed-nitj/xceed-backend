@@ -1,6 +1,6 @@
-import * as timetable from './timetable';
+import * as Faculty from './faculty';
 
 
 export {
-    timetable
+    Faculty
 }

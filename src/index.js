@@ -17,11 +17,12 @@ const confrenceModule = require("./confrenceModule/routes/index");
 app.use("/confrenceModule", confrenceModule);
 
 const timetableModule = require("./timetableModule/routes/index");
-app.use("/timetableModule", timetableModule);
+app.use("/timetablemodule", timetableModule);
+
 
 
 app.get('/', (req, res) => {
-    res.send("Hello World");
+    res.send("Hello India");
 });
 
 // Connect to MongoDB and listen for events
