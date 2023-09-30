@@ -20,6 +20,9 @@ const timetableModule = require("./timetableModule/routes/index");
 app.use("/timetablemodule", timetableModule);
 
 
+const certificateModule= require("./certificateModule/routes/index");
+app.use("/certificateModule", certificateModule);
+
 
 app.get('/', (req, res) => {
     res.send("Hello India");
