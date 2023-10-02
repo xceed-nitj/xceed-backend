@@ -3,6 +3,8 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require('dotenv');
 const cors = require("cors");
+const multer = require('multer');
+const csv = require('csv-parser');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -20,13 +22,17 @@ const timetableModule = require("./timetableModule/routes/index");
 app.use("/timetablemodule", timetableModule);
 
 
-const certificateModule= require("./certificateModule/routes/index");
+const certificateModule = require("./certificateModule/routes/index");
 app.use("/certificateModule", certificateModule);
-
 
 app.get('/', (req, res) => {
     res.send("Hello India");
 });
+
+app.set("view engine", "ejs");
+app.get('/index', (req, res) => {
+    res.render('index');
+})
 
 // Connect to MongoDB and listen for events
 mongoose
@@ -57,3 +63,7 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('disconnected', () => {
     console.log('Mongoose disconnected from MongoDB');
 });
+
+
+
+

@@ -1,5 +1,5 @@
 const Certificate = require("../models/certificate");
-const HttpException = require("../models/http-exception");
+const HttpException = require("../models/htttp-exception");
 
 class CertificateController {
   async addCertificate(certificate) {
