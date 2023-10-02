@@ -10,7 +10,7 @@ const announcementSchema = new mongoose.Schema({
   sequence: Number, // No longer required
   new: Boolean, // No longer required
   hidden: Boolean, // No longer required
-  link: String,
+  link: String, 
 });
 
 // Create the Mongoose model

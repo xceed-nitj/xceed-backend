@@ -25,6 +25,9 @@ app.use("/timetablemodule", timetableModule);
 const certificateModule = require("./certificateModule/routes/index");
 app.use("/certificateModule", certificateModule);
 
+const uploadModule = require("./uploadModule/upload")
+app.use("/upload", uploadModule);
+
 app.get('/', (req, res) => {
     res.send("Hello India");
 });
