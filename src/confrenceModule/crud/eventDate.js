@@ -4,8 +4,8 @@ const HttpException = require("../models/http-exception");
 
 class EventDateController {
   // GET /eventDates/conference/:id
-  async getEventDatesByConferenceId(req, res) {
-    const { id } = req.params;
+  async getEventDatesByConferenceId(id) {
+    
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
@@ -14,7 +14,7 @@ class EventDateController {
       const eventDates = await EventDate.find({ confId: id });
 
       if (!eventDates) throw new HttpException(400, "data does not exists");
-      res.json(eventDates);
+      return eventDates;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
@@ -25,15 +25,16 @@ class EventDateController {
     try {
       // Find all EventDate documents using the Mongoose model
       const eventDates = await EventDate.find();
-      res.json(eventDates);
+      console.log("eventdates:",eventDates);
+      return eventDates;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
   }
 
   // GET /eventDates/:id
-  async getEventDateById(req, res) {
-    const { id } = req.params;
+  async getEventDateById(id) {
+    ;
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
@@ -41,9 +42,9 @@ class EventDateController {
       // Find an EventDate document by its _id using the Mongoose model
       const eventDate = await EventDate.findById(id);
       if (eventDate) {
-        res.json(eventDate);
+       return eventDate
       } else {
-        res.status(404).json({ error: "EventDate not found" });
+        throw new HttpException(404, "event date not found");
       }
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
@@ -51,15 +52,16 @@ class EventDateController {
   }
 
   // POST /eventDates
-  async createEventDate(req, res) {
-    const newEventDate = req.body;
+  async createEventDate(data) {
+    
     // if(!isValidEventDates(newEventDate)) {
     //     return res.status(400).json({ error: 'Invalid Event date' });
     //   }
     try {
       // Create a new EventDate document using the Mongoose model
-      const createdEventDate = await EventDate.create(newEventDate);
-      res.json(createdEventDate);
+      const createdEventDate = EventDate(data);
+      createdEventDate.save();
+      return createdEventDate;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
@@ -93,18 +95,16 @@ class EventDateController {
   }
 
   // DELETE /eventDates/:id
-  async deleteEventDate(req, res) {
-    const { id } = req.params;
+  async deleteEventDate(id) {
+    
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
     try {
       // Delete an EventDate document by its _id using the Mongoose model
       const deletedEventDate = await EventDate.findByIdAndDelete(id);
-      if (deletedEventDate) {
-        res.json({ message: "EventDate deleted successfully" });
-      } else {
-        res.status(404).json({ error: "EventDate not found" });
+      if (!deletedEventDate) {
+        throw new HttpException(404, "event date not found");
       }
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");

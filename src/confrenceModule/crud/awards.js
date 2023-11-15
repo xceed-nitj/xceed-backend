@@ -31,7 +31,7 @@ class AwardsController {
   }
 
   // GET /awards/:id
-  async getAwardById(ID) {
+  async getAwardById(id) {
   
     if (!id) {
       throw new HttpException(400, "Invalid Id");

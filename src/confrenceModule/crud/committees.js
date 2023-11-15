@@ -3,18 +3,18 @@ const HttpException = require("../models/http-exception");
 
 class CommitteesController {
   // GET /committees/conference/:id
-  async getCommitteesByConferenceId(req, res) {
-    const { id } = req.params;
+  async getCommitteesByConferenceId(id) {
+    
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
     try {
       // Find committees with a specific ConfId using the Mongoose model
-      const committees = await Committee.find({ ConfId: id });
-
+      const committees = await Committee.find({ ConfId: id });  
+      console.log('comittees',committees);
       if (!committees) throw new HttpException(400, "data does not exists");
 
-      res.json(committees);
+      return committees;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
@@ -25,15 +25,16 @@ class CommitteesController {
     try {
       // Find all committees using the Mongoose model
       const committees = await Committee.find();
-      res.json(committees);
+      console.log(committees);
+      return committees;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
   }
 
   // GET /committees/:id
-  async getCommitteeById(req, res) {
-    const { id } = req.params;
+  async getCommitteeById(id) {
+    
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
@@ -41,9 +42,10 @@ class CommitteesController {
       // Find a committee by its _id using the Mongoose model
       const committee = await Committee.findById(id);
       if (committee) {
-        res.json(committee);
+        console.log(committee);
+        return committee;
       } else {
-        res.status(404).json({ error: "Committee not found" });
+        throw new HttpException(404,  "commitee not  found");
       }
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
@@ -51,37 +53,32 @@ class CommitteesController {
   }
 
   // POST /committees
-  async createCommittee(req, res) {
-    const newCommittee = req.body;
+  async createCommittee(newCommittee) {
     // if(!isValidCommittee(conf)) {
     //     return res.status(400).json({ error: 'Invalid Committee data' });
     // }
     try {
       // Create a new committee document using the Mongoose model
       const createdCommittee = await Committee.create(newCommittee);
-      res.json(createdCommittee);
+      return createdCommittee;
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
     }
   }
 
   // PUT /committees/:id
-  async updateCommittee(req, res) {
-    const { id } = req.params;
+  async updateCommittee(id , updatedCommittee) {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    const updatedCommittee = req.body;
-    if (!isValidCommittee(conf)) {
-      return res.status(400).json({ error: "Invalid Committee data" });
-    }
+   
     try {
       // Update a committee by its _id using the Mongoose model
-      const committee = await Committee.findByIdAndUpdate(id, updatedCommittee);
+      const committee = await Committee.findByIdAndUpdate(id, updatedCommittee, {new:true});
       if (committee) {
-        res.json(committee);
+        return committee; 
       } else {
-        res.status(404).json({ error: "Committee not found" });
+        throw new HttpException(404, "Committee not found" ); 
       }
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");
@@ -89,8 +86,8 @@ class CommitteesController {
   }
 
   // DELETE /committees/:id
-  async deleteCommittee(req, res) {
-    const { id } = req.params;
+  async deleteCommittee(id) {
+   
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
@@ -98,9 +95,9 @@ class CommitteesController {
       // Delete a committee by its _id using the Mongoose model
       const committee = await Committee.findByIdAndDelete(id);
       if (committee) {
-        res.json(committee);
+        return committee
       } else {
-        res.status(404).json({ error: "Committee not found" });
+        throw new HttpException(404, "Committee not found" ); 
       }
     } catch (error) {
       throw new HttpException(500, error.message || "Internal server error");

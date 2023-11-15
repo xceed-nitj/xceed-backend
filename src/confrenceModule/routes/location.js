@@ -70,7 +70,7 @@ router.delete("/:id", async (req, res) => {
     res.status(200).json({ message: "Location deleted successfully" });
   } catch (e) {
     console.error("Error deleting location:", e);
-    res.status(500).json({ error: e?.meta?.cause || "Internal Server Error" });
+    res.status(500).json({ error: e?.meta?.cause || "Internal Server Error" }); 
   }
 });
 
