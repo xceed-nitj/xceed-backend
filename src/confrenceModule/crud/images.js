@@ -8,7 +8,9 @@ class ImagesController {
     //   }
     try {
       // Create a new Image document using the Mongoose model
-      await Image.create(image);
+     const newImage = new Image(image);
+     newImage.save();
+     console.log(newImage);
     } catch (e) {
       throw new HttpException(500, e?.message || "Internal Server Error");
     }
@@ -35,12 +37,10 @@ class ImagesController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidImages(image)) {
-      return res.status(400).json({ error: "Invalid Image data" });
-    }
+    
     try {
       // Update an Image document by its _id using the Mongoose model
-      await Image.findByIdAndUpdate(id, image);
+      return await Image.findByIdAndUpdate(id, image);
     } catch (e) {
       throw new HttpException(500, e?.message || "Internal Server Error");
     }

@@ -56,9 +56,7 @@ class NavbarController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidNavbar(navbar)) {
-      return res.status(400).json({ error: "Invalid navbar data" });
-    }
+    
 
     try {
       // Update a Navbar document by _id using the Mongoose model

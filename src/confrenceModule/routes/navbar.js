@@ -59,8 +59,11 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const navbarItem = req.body;
-    await Navbar.updateNavbar(navbarItem, id);
-    res.status(200).json({ success: "Navbar item updated successfully" });
+    const updated=await Navbar.updateNavbar(navbarItem, id);
+    if(!updated){
+      res.status(200).json({ success: "Navbar item not found" });    
+    }else 
+    res.status(200).json({ success: "Navbar item updated successfully" });    
   } catch (e) {
     console.error("Error retrieving navbar items:", e);
     res

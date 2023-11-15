@@ -12,6 +12,7 @@ class AnnouncementController {
       await newAnnouncement.save();
     } catch (e) {
       throw new HttpException(500, e.message || "Internal Server Error");
+
     }
   }
 
@@ -61,14 +62,19 @@ class AnnouncementController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidAnnouncement(announcement)) {
-      return res.status(400).json({ error: "Invalid Announcement data" });
-    }
+    
     try {
       // Update an Announcement document by its _id using the Mongoose model
-      await Announcement.findByIdAndUpdate(id, announcement);
+      console.log(id , announcement);
+      const newup = await Announcement.findByIdAndUpdate({_id:id}, announcement,{  
+        new: true
+    });
+      console.log(newup);
+      if (!newup) {
+        throw new HttpException(404, "announcement not found");
+      }
     } catch (e) {
-      throw new HttpException(500, e.message || "Internal Server Error");
+      throw new HttpException(500, e.message || "Internal Server Error");   
     }
   }
 

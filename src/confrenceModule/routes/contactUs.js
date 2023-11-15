@@ -29,6 +29,7 @@ router.get("/:confId", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newContact = req.body;
+    console.log(newContact);
     if (!newContact.confId) {
       res.status(400).json({ message: "Conference ID is required" });
       return;
@@ -38,7 +39,7 @@ router.post("/", async (req, res) => {
   } catch (e) {
     res
       .status(500)
-      .json({ message: e?.meta?.cause || "Internal Server Error" });
+      .json({ message: e?.meta?.cause || "Internal Server error" });
   }
 });
 
@@ -51,7 +52,7 @@ router.put("/:id", async (req, res) => {
       return;
     }
     const contact = await contactUsController.updateContact(id, updatedContact);
-    res.status(200).json(contact);
+    res.status(200).json({ response: "contact updated successfully" });
   } catch (e) {
     res
       .status(e.status || 500)

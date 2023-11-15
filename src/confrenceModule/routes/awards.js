@@ -4,10 +4,11 @@ const AwardsController = require("../crud/awards");
 const awardsRouter = express.Router();
 const awardsController = new AwardsController();
 
-// GET /awards/conference/:id
-awardsRouter.get("/conference/:id", async (req, res) => {
+// GET /awards/:id
+awardsRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id);
     const awards = await awardsController.getAwardsByConferenceId(id);
     res.status(200).json(awards);
   } catch (error) {
@@ -50,7 +51,7 @@ awardsRouter.post("/", async (req, res) => {
   try {
     const newAward = req.body;
     const award = await awardsController.createAward(newAward);
-    res.status(201).json(award);
+    res.status(201).json('new award created sucessfully');
   } catch (error) {
     console.error("Error creating award:", error);
     res
@@ -65,7 +66,7 @@ awardsRouter.put("/:id", async (req, res) => {
     const { id } = req.params;
     const updatedAward = req.body;
     const award = await awardsController.updateAward(id, updatedAward);
-    res.status(200).json(award);
+    res.status(200).json('award updated sucessfully');
   } catch (error) {
     console.error("Error updating award:", error);
     res
