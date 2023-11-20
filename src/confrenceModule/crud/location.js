@@ -9,7 +9,7 @@ class LocationController {
     try {
       // Find a Location document that matches the confId using the Mongoose model
       const location = await Location.findOne({ confId: confId });
-      if (!location) throw new HttpException(400, "data does not exists");
+      if (!location) throw new HttpException(404, "data does not exists");
       return location;
     } catch (e) {
       throw new HttpException(500, e?.message || "Internal Server Error");
@@ -22,7 +22,9 @@ class LocationController {
     // }
     try {
       // Create a new Location document using the Mongoose model
-      return await Location.create(data);
+      const newLocation = Location(data);
+      newLocation.save();
+      return newLocation;
     } catch (e) {
       throw new HttpException(500, e?.message || "Internal Server Error");
     }
@@ -32,12 +34,10 @@ class LocationController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidLocation(data)) {
-      return res.status(400).json({ error: "Invalid Location data" });
-    }
+   
     try {
       // Update a Location document by its _id using the Mongoose model
-      return await Location.findByIdAndUpdate(id, data);
+      return await Location.findByIdAndUpdate(id, data, {new:true});
     } catch (e) {
       throw new HttpException(500, e?.message || "Internal Server Error");
     }

@@ -56,9 +56,7 @@ class HomeController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidHome(home)) {
-      return res.status(400).json({ error: "Invalid Home data" });
-    }
+  
 
     try {
       // Update a Home document by its _id using the Mongoose model

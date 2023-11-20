@@ -15,7 +15,7 @@ router.get("/:id", async (req, res) => {
     res
       .status(e?.code || 500)
       .json({ error: e?.meta?.cause || "Internal server error" });
-  }
+  } 
 });
 
 router.post("/", async (req, res) => {
@@ -35,9 +35,12 @@ router.put("/:imgID", async (req, res) => {
   try {
     const image = req.body;
     const id = req.params.imgID;
-    await imagesController.updateImage(id, image);
+    const newImage=await imagesController.updateImage(id, image);
+    if(!newImage){
+      res.status(200).json({ response: "Image not found" });
+    }else
     res.status(200).json({ response: "Image Updated Successfully" });
-  } catch (e) {
+  } catch (e) { 
     console.error("Error updating image:", e);
     res
       .status(e?.code || 500)

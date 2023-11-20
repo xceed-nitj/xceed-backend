@@ -1,5 +1,6 @@
 const Conf = require("../models/confrence");
 const HttpException = require("../models/http-exception");
+const mongoose = require("mongoose");
 
 class ConfController {
   async addConf(conf) {
@@ -12,7 +13,10 @@ class ConfController {
 
     try {
       // Create a new Conf document using the Mongoose model
-      const createdConf = await Conf.create(conf);
+      conf._id = new mongoose.Types.ObjectId();  
+      const createdConf = new Conf(conf);
+      createdConf.save();
+      // const createdConf = await Conf.create(conf);
       return createdConf;
     } catch (e) {
       throw new HttpException(500, e.message || "Internal Server Error");
@@ -50,9 +54,7 @@ class ConfController {
     if (!id) {
       throw new HttpException(400, "Invalid Id");
     }
-    if (!isValidConfrence(conf)) {
-      return res.status(400).json({ error: "Invalid Confrence data" });
-    }
+  
     if (!conf.email || !conf.email.includes("@")) {
       throw new HttpException(400, "Invalid Email");
     }

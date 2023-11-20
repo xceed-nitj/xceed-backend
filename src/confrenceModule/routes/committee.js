@@ -7,21 +7,20 @@ const committeesController = new CommitteesController();
 // GET /committees/conference/:id
 committeesRouter.get("/", async (req, res) => {
   try {
-    const allConferences = await committeesController.getAllConferences();
+    const allConferences = await committeesController.getAllCommittees();
     res.status(200).json(allConferences);
   } catch (e) {
     res
       .status(e?.status || 500)
       .json({ error: e?.message || "Internal Server Error" });
-  }
+  } 
 });
 
 committeesRouter.get("/conference/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const committees = await committeesController.getCommitteesByConferenceId(
-      id
-    );
+    console.log(id);
+    const committees = await committeesController.getCommitteesByConferenceId(id);
     res.status(200).json(committees);
   } catch (e) {
     res

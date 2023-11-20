@@ -57,6 +57,7 @@ router.put("/:id", async (req, res) => {
   try {
     const announcementId = req.params.id;
     const updatedAnnouncement = req.body;
+    console.log(updatedAnnouncement);
     await announcementController.updateAnnouncement(
       announcementId,
       updatedAnnouncement

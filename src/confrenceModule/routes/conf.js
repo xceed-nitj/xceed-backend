@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
         await confController.addConf(confObj);
         res.status(200).json({ success: "Added Successfully" });
     } catch (e) {
-        console.error("Error retrieving navbar items:", e);
+        console.error("Error retrieving conf items:", e);
         res.status(e?.code || 500).json({ error: e?.message || "Internal server error" });
     }
 });

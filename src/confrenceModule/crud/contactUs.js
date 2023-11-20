@@ -17,11 +17,14 @@ class ContactUsController {
     //     return res.status(400).json({ error: 'Invalid Contact data' });
     //   }
     try {
+      console.log('data',data);
       // Create a new ContactUs document using the Mongoose model
-      const createdContact = await ContactUs.create(data);
+     const createdContact=new ContactUs(data);
+     createdContact.save(); 
+      console.log(createdContact);
       return createdContact;
     } catch (e) {
-      throw new HttpException(500, e.message || "Internal Server Error");
+      throw new HttpException(500, e.message || "Internal Server error");
     }
   }
 
@@ -30,9 +33,7 @@ class ContactUsController {
       if (!id) {
         throw new HttpException(400, "Contact ID is required");
       }
-      if (!isValidContact(data)) {
-        return res.status(400).json({ error: "Invalid Contact data" });
-      }
+     
       // Update a ContactUs document by its _id using the Mongoose model
       const updatedContact = await ContactUs.findByIdAndUpdate(id, data, {
         new: true,
@@ -42,7 +43,7 @@ class ContactUsController {
       }
       return updatedContact;
     } catch (e) {
-      throw new HttpException(500, e.message || "Internal Server Error");
+      throw new HttpException(500, e.message || "Internal Server Error"); 
     }
   }
 
